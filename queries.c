@@ -143,10 +143,8 @@ void selectTableTwo(struct carrera *carreras, int cont, int columnas[3], int opp
     }
 };
 
-int joinCondition(struct alumno alumnoJ, int col1, struct carrera carreraJ, int col2)
-{
-    switch (col1)
-    {
+int joinCondition(struct alumno alumnoJ, int col1, struct carrera carreraJ, int col2){
+    switch (col1){
     case 1:            
         if(col2 == 1){
             return(alumnoJ.matricula == carreraJ.carreraId);
@@ -200,43 +198,33 @@ int joinCondition(struct alumno alumnoJ, int col1, struct carrera carreraJ, int 
     return 0;
 }
 
-void joinTable(struct alumno *alumnos, int contA, int columnas1[9], struct carrera *carreras, int contC, int columnas2[5], int col1, int col2, char string[20000])
-{
+void joinTable(struct alumno *alumnos, int contA, int columnas1[9], struct carrera *carreras, int contC, int columnas2[5], int col1, int col2, char string[20000]){
     char temp[500];
 
-    for (int i = 0; i < contA; i++)
-    {
-        for (int j = 0; j < contC; j++)
-        {
-            if (joinCondition(alumnos[i], col1, carreras[j], col2) == 1)
-            {
-                if (columnas1[0] == 1)
-                {
+    for (int i = 0; i < contA; i++){
+        for (int j = 0; j < contC; j++){
+            if (joinCondition(alumnos[i], col1, carreras[j], col2) == 1){
+                if (columnas1[0] == 1){
                     snprintf(temp, sizeof temp, "%d;", alumnos[i].matricula);
                     strcat(string, temp);
                 }
-                if (columnas1[1] == 1)
-                {
+                if (columnas1[1] == 1){
                     snprintf(temp, sizeof temp, "%s;", alumnos[i].nombre);
                     strcat(string, temp);
                 }
-                if (columnas1[2] == 1)
-                {
+                if (columnas1[2] == 1){
                     snprintf(temp, sizeof temp, "%s;", alumnos[i].apellido);
                     strcat(string, temp);
                 }
-                if (columnas2[0] == 1)
-                {
+                if (columnas2[0] == 1){
                     snprintf(temp, sizeof temp, "%s;", carreras[j].carreraId);
                     strcat(string, temp);
                 }
-                if (columnas2[1] == 1)
-                {
+                if (columnas2[1] == 1){
                     snprintf(temp, sizeof temp, "%d;", carreras[j].semestre);
                     strcat(string, temp);
                 }
-                if (columnas2[2] == 1)
-                {
+                if (columnas2[2] == 1){
                     snprintf(temp, sizeof temp, "%0.f;", carreras[j].promedio);
                     strcat(string, temp);
                 }
