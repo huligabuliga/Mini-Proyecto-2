@@ -21,7 +21,7 @@ const char *insertT1(){
     printf("Ingresa el apellido del alumn: ");
     scanf("%c", &str2);
     scanf("%[^\n]", apellido);
-    snprintf(str, sizeof str, "");
+    //snprintf(str, sizeof str, ""); //this
 }
 int main(int argc, char const* argv[])
 {

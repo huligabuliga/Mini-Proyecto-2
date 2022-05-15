@@ -44,9 +44,9 @@ int leeAlumno(struct alumno *alum){
     int NumAlum = 0;
     FILE *archivo = fopen("table_1.txt", "r");
 
-    if(archivo == NULL){
-        fprintf(arch, "Error abriendo tabla1.txt.\n");
-        }
+   // if(archivo == NULL){
+     //   fprintf(arch, "Error abriendo tabla1.txt.\n");
+        //}
     
     while(fgets(str, sizeof(str), archivo)){
         int i = 0;
@@ -91,8 +91,8 @@ int leeCarrera(struct carrera *car){
     int NumCar = 0;
     FILE *archivo = fopen("table_2.txt", "r");
 
-    if(archivo == NULL)
-        fprintf(arch, "Error abriendo tabla2.txt.\n");
+    //if(archivo == NULL)
+      //  fprintf(arch, "Error abriendo tabla2.txt.\n");
     
     while(fgets(str, sizeof(str), archivo)){
         int i = 0;
@@ -270,7 +270,8 @@ int main(int argc , char *argv[])
     struct _account users[10] = {"", ""};
     read_config(users);
 
-    struct alumno alum[50] = {NULL, "", ""};
+//here
+    struct alumno alum[50] = {0, "", ""}; //null before but breaks code... 
     struct carrera car[50] = {0, "", ""};
     int NumAlum = leeAlumno(alum)-1;
     int NumCar = leeCarrera(car)-1;

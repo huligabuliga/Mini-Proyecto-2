@@ -1,6 +1,3 @@
 Socket has been created.
 Bound.
 Waiting for connections...
-User Password jonas pass1234
-User Password 0 0
-Connected, user authenticated.
