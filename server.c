@@ -58,7 +58,7 @@ int read_config(struct _account *users){
             configBuffer[strcspn(configBuffer, "\n")] = 0;
             configBuffer[strcspn(configBuffer, "\r")] = 0;
             printf("%s", configBuffer);
-            char* sp = ";";
+            char* sp = ",";
             char* user = strtok(configBuffer, sp);
             char* password = strtok(NULL, sp);
             //store in array
