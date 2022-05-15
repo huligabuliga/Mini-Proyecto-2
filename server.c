@@ -39,6 +39,101 @@ struct carrera{
     char semestre[15];
 };
 
+int leeAlumno(struct alumno *alum){
+    char str[200];
+    int NumAlum = 0;
+    FILE *archivo = fopen("table_1.txt", "r");
+
+    if(archivo == NULL){
+        fprintf(arch, "Error abriendo tabla1.txt.\n");
+        }
+    
+    while(fgets(str, sizeof(str), archivo)){
+        int i = 0;
+        int rec = 0;
+
+        while(NumAlum!=0&&rec<5){
+            
+            char line[200] = {0};
+            char *tok = strtok(str, ",");
+            strcpy(line, tok);
+            
+        while(tok!=NULL&&rec==0){
+            if(i==0){
+                alum[NumAlum-1].matricula=atoi(line);
+                i++;
+            }
+            else if(i==1){
+                strcpy(alum[NumAlum-1].nombre, line);
+                i++;
+            }
+            else if(i==2){
+                strcpy(alum[NumAlum-1].apellido, line);
+                rec = 1;
+                i++;
+            }
+            i = 0;
+            rec++;
+            if(rec!=0){
+                tok=strtok(NULL, ",");
+                strcpy(str, tok);
+            }
+        }
+    }
+    NumAlum++;
+        }
+    fclose(archivo);
+    return NumAlum;
+}
+
+int leeCarrera(struct carrera *car){
+    char str[200];
+    int NumCar = 0;
+    FILE *archivo = fopen("table_2.txt", "r");
+
+    if(archivo == NULL)
+        fprintf(arch, "Error abriendo tabla2.txt.\n");
+    
+    while(fgets(str, sizeof(str), archivo)){
+        int i = 0;
+        int rec = 0;
+
+        while(NumCar!=0&&rec<5){
+            
+            char line[200];
+            char *tok = strtok(str, ",");
+            strcpy(str, tok);
+            
+        while(tok!=NULL&&rec==0){
+            if(i==0){
+                car[NumCar-1].calificacion = atof(line);
+                i++;
+           
+            }
+            else if(i==1){
+                strcpy(car[NumCar-1].carrera, line);
+                i++;
+          
+            }
+            else if(i==2){
+                strcpy(car[NumCar-1].semestre, line);
+                i++;
+         
+            }
+            i = 0;
+            rec++;
+            if(rec!=0){
+                tok=strtok(NULL, ",");
+                strcpy(str, tok);
+            }
+        }
+    }
+    NumCar++;
+        }
+    fclose(archivo);
+    return NumCar;
+}
+
 //change this
 //function that reads config file
 //https://stackoverflow.com/questions/14815449/read-name-and-password-from-a-file-in-c
@@ -174,6 +269,11 @@ int main(int argc , char *argv[])
     // GET CONFIG DATA
     struct _account users[10] = {"", ""};
     read_config(users);
+
+    struct alumno alum[50] = {NULL, "", ""};
+    struct carrera car[50] = {0, "", ""};
+    int NumAlum = leeAlumno(alum)-1;
+    int NumCar = leeCarrera(car)-1;
 
     // ACCEPT CONNECTIONS
     while ((new_socket = accept(s, (struct sockaddr*)&address, (socklen_t*)&addrlen))) {

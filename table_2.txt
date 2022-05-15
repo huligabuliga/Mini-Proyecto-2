@@ -1,0 +1,3 @@
+80.2,itc,septimo,
+75.0,iqa,sexto,
+94.2,economia,segundo,
