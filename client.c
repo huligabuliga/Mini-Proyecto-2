@@ -14,14 +14,14 @@ const char *insertT1(){
     int mat;
     char str2, nombre[25], apellido[30];
     printf("Ingresa la matricula (ejem. 01720068): ");
-    scand("%d", &mat);
+    scanf("%d", &mat);
     printf("Ingresa el nombre del alumno: ");
     scanf("%c", &str2);
     scanf("%[^\n]", nombre);
     printf("Ingresa el apellido del alumn: ");
     scanf("%c", &str2);
     scanf("%[^\n]", apellido);
-    snprintf(str, sizeof str, "")
+    snprintf(str, sizeof str, "");
 }
 int main(int argc, char const* argv[])
 {
@@ -88,7 +88,6 @@ int main(int argc, char const* argv[])
         printf("\n This is a database that contains student records\n");
         printf("Table one contains student information, type 1 and press enter to view\n");
         printf("Table two contains academic information, type 2 and press enter to view\n");
-        printf("") 
         // insert quries here: SELECT, INSERT, JOIN.
 
     } else {
