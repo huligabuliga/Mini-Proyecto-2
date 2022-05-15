@@ -10,6 +10,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 //define port
+
+//before testing make sure port is free 
+
+//fuser -n tcp -k 8080
 #define PORT 8080
 
 
@@ -19,40 +23,39 @@ FILE *ptrLogs;
 
 //structure defining accounts malloc
 struct _account {
-    char username[50];
-    char password[50];
+    char username[20];
+    char password[20];
 };
 
+//change this
 //function that reads config file
 //https://stackoverflow.com/questions/14815449/read-name-and-password-from-a-file-in-c
 int read_config(struct _account *users){
-    char *filename = "config.txt";
-    FILE *fp = fopen(filename, "r");
+    FILE *fp = fopen("config.txt", "r");
 
-    if (fp == NULL) {
-        fprintf(ptrLogs, "Config.txt error.\n");
-        fflush(ptrLogs);
-    };
+    char configBuffer[256];
+    int i = 0;
+    int fl = 0;
 
-    const unsigned MAX_LENGTH = 256;
-    char buffer[MAX_LENGTH];
-    int i = 0, firstLine = 0;
-
-    while (fgets(buffer, MAX_LENGTH, fp)) {
-        if (firstLine == 0) {
-            firstLine = 1;
-        } else {
-            buffer[strcspn(buffer, "\n")] = 0;
-            buffer[strcspn(buffer, "\r")] = 0;
-            printf("%s", buffer);
+    while (fgets(configBuffer, 256, fp)) {
+        if (fl == 0) {
+            fl = 1;
+        } 
+        else 
+        {
+            configBuffer[strcspn(configBuffer, "\n")] = 0;
+            configBuffer[strcspn(configBuffer, "\r")] = 0;
+            printf("%s", configBuffer);
             char* sp = ";";
-            char* user = strtok(buffer, sp);
+            char* user = strtok(configBuffer, sp);
             char* password = strtok(NULL, sp);
+            //store in array
             strcpy(users[i].username, user);
             strcpy(users[i].password, password);
             i++;
         }
     }
+
     fclose(fp);
 
     return 0;
@@ -116,54 +119,53 @@ static void daemonize()
 
 int main(int argc , char *argv[])
 {
-    printf("Starting daemonize\n");
+   // START DAEMON
+    printf("Starting Daemon-Server\n");
     daemonize();
 
     // SOCKET
     ptrLogs = fopen("serverlogs.txt", "w");
 
-
-
-    int socket_desc , new_socket , c, data;
-    struct sockaddr_in server , client;
+    int s, c, new_socket, data;
     struct sockaddr_in address;
-    char *message;
-    int opt = 1; 
+    int opt = 1;
     int addrlen = sizeof(address);
-    char buffer[1024] = {0};
-    
-    //Create socket
-    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-    if (socket_desc == -1)
-    {
-        printf("Could not create socket");
+    char buffer[1024] = { 0 };
+    // char buffer[3][20];
+   
+    // CREATE SOCKET
+    if ((s = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        fprintf(ptrLogs, "Error creating socket.\n");
+        fflush(ptrLogs);
+        exit(EXIT_FAILURE);
     }
-    
-    //Prepare the incoming port and address
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons( 8080 );
-    
-    //Bind
-    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        puts("bind failed");
-        return 1;
+    fprintf(ptrLogs, "Socket has been created.\n");
+    fflush(ptrLogs);
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(PORT);
+ 
+    // BIND SOCKET
+    if (bind(s, (struct sockaddr*)&address, sizeof(address)) < 0) {
+        fprintf(ptrLogs, "Bind failed.\n");
+        fflush(ptrLogs);
+        exit(EXIT_FAILURE);
     }
-    puts("Bound");
-    
-    //Listen
-    listen(socket_desc , 3);
-    
+    fprintf(ptrLogs, "Bound.\n");
+    fflush(ptrLogs);
+
+    // LISTEN FOR CONNECTIONS
+    listen(s, 3);
+    fprintf(ptrLogs, "Waiting for connections...\n");
+    fflush(ptrLogs);
+
+    // GET CONFIG DATA
     struct _account users[10] = {"", ""};
     read_config(users);
 
-
-    //Accept and incoming connection
-    puts("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
-    while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
-    { // GET OPTION
+    // ACCEPT CONNECTIONS
+    while ((new_socket = accept(s, (struct sockaddr*)&address, (socklen_t*)&addrlen))) {
+        // GET OPTION
         data = read(new_socket, buffer, 1024);
         char tempBuffer[1024] = {0};
         strcpy(tempBuffer, buffer);
@@ -186,7 +188,7 @@ int main(int argc , char *argv[])
                 if(validUsername == 0 && validPassword == 0) {
                     fprintf(ptrLogs, "Connected, user authenticated.\n");            
                     fflush(ptrLogs);
-                    send(new_socket, "1", strlen("1"), 0);
+                    send(new_socket, " 1 ", strlen(" 1 "), 0);
                     break;
                 }
                 
@@ -197,14 +199,11 @@ int main(int argc , char *argv[])
             fprintf(ptrLogs, "Accept failed.\n");
             exit(EXIT_FAILURE);
         }
-    }
-    
-    if (new_socket<0)
-    {
-        perror("accept failed");
-        return 1;
-    }
-    
-    
+    };
+
+    fclose(ptrLogs);
+    close(s);
+
     return EXIT_SUCCESS;
+
 }
