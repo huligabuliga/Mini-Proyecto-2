@@ -27,6 +27,18 @@ struct _account {
     char password[20];
 };
 
+struct alumno{
+    int matricula;
+    char nombre[25];
+    char apellido[25];
+};
+
+struct carrera{
+    double calificacion;
+    char carrera[50];
+    char semestre[15];
+};
+
 //change this
 //function that reads config file
 //https://stackoverflow.com/questions/14815449/read-name-and-password-from-a-file-in-c
