@@ -21,7 +21,7 @@ const char *insertT1(){
     printf("Ingresa el apellido del alumn: ");
     scanf("%c", &str2);
     scanf("%[^\n]", apellido);
-    //snprintf(str, sizeof str, ""); //this
+    snprintf(str, sizeof str, "%d, %s, %s,", mat,nombre,apellido); 
 }
 int main(int argc, char const* argv[])
 {
@@ -85,9 +85,6 @@ int main(int argc, char const* argv[])
     
     if (atoi(buffer) == 1) {
         puts("Connected.");
-        printf("\n This is a database that contains student records\n");
-        printf("Table one contains student information, type 1 and press enter to view\n");
-        printf("Table two contains academic information, type 2 and press enter to view\n");
         // insert quries here: SELECT, INSERT, JOIN.
 
     } else {

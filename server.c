@@ -15,6 +15,7 @@
 
 //fuser -n tcp -k 8080
 #define PORT 8080
+FILE *serverlogs;
 
 
 
@@ -44,9 +45,9 @@ int leeAlumno(struct alumno *alum){
     int NumAlum = 0;
     FILE *archivo = fopen("table_1.txt", "r");
 
-   // if(archivo == NULL){
-     //   fprintf(arch, "Error abriendo tabla1.txt.\n");
-        //}
+    if(archivo == NULL){
+        fprintf(serverlogs, "Error abriendo tabla1.txt.\n");
+        }
     
     while(fgets(str, sizeof(str), archivo)){
         int i = 0;
@@ -91,8 +92,8 @@ int leeCarrera(struct carrera *car){
     int NumCar = 0;
     FILE *archivo = fopen("table_2.txt", "r");
 
-    //if(archivo == NULL)
-      //  fprintf(arch, "Error abriendo tabla2.txt.\n");
+    if(archivo == NULL)
+      fprintf(serverlogs, "Error abriendo tabla2.txt.\n");
     
     while(fgets(str, sizeof(str), archivo)){
         int i = 0;
